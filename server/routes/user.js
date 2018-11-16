@@ -1,16 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-
+	res.redirect("/");
 });
 
 router.get("/requests", async function(req, res, next) {
 	let accountService = global.getService("account");
 	let account = await accountService.sessionAccount(req);
 
-	if (!account || account.username.toLowerCase() !== "brent") {
+	if (!account || !account.admin) {
 		res.redirect("/");
 	}
 
@@ -22,7 +21,7 @@ router.get("/requests/:id", async function(req, res, next) {
 	let accountService = global.getService("account");
 	let account = await accountService.sessionAccount(req);
 
-	if (!account || account.username.toLowerCase() !== "brent") {
+	if (!account || !account.admin) {
 		res.redirect("/");
 	}
 
@@ -50,16 +49,6 @@ router.post("/login", async function(req, res, next) {
 	let accountService = global.getService("account");
 
 	if (req.body.request) {
-		if (!username || !username.trim().length) {
-			return res.send("A username is required to register. <a href='/'>Return Home</a>");
-		} else if (!password || !password.trim().length) {
-			return res.send("A passwrod is required to register. <a href='/'>Return Home</a>");
-		} else if (username.length < 5) {
-			return res.send("A recognizable username of 5 characters is required to register. <a href='/'>Return Home</a>");
-		} else if (username.indexOf(' ') !== -1) {
-			return res.send("A username can not consist of spaces. <a href='/'>Return Home</a>");
-		}
-
 		let result = await accountService.create(username, password, true);
 		if (result === false) {
 			return res.send("There was a problem creating your request, please try again. <a href='/'>Return Home</a>");

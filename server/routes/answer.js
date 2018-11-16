@@ -1,6 +1,10 @@
 var express = require("express");
 var router = express.Router();
 
+const questionLimitMilliseconds = 60000;
+const answerLimitMilliseconds = 60000;
+const voteLimitSeconds = 0;
+
 async function show(req, res) {
     let accountService = global.getService("account");
 	let account = await accountService.sessionAccount(req);
@@ -34,8 +38,14 @@ router.get("/:id/:question/:answerId", async function(req, res, next) {
 router.post("/", async function(req, res, next) {
     let account = await global.getService("account").sessionAccount(req);
     if (!account) {
-        res.redirect("/");
-        return;
+        return res.redirect("/");
+    }
+
+    if (account.lastQuestion) {
+        if (new Date() - new Date(account.lastQuestion) < questionLimitMilliseconds) {
+            // TODO:  Rather than just redirecting the user, they should get a rate limit warning
+            return res.redirect("/");
+        }
     }
 
     let question = req.body.question.trim();
@@ -58,6 +68,13 @@ router.post("/:id", async function(req, res, next) {
     if (!account) {
         res.redirect("/");
         return;
+    }
+
+    if (account.lastQuestion) {
+        if (new Date() - new Date(account.lastAnswer) < answerLimitMilliseconds) {
+            // TODO:  Rather than just redirecting the user, they should get a rate limit warning
+            return res.redirect("/");
+        }
     }
 
     let questionId = req.params.id.trim();

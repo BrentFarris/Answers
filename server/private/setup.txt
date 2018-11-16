@@ -1,0 +1,1 @@
+To setup your server go to your host address /setup to get started. This file is here because you've not setup your server yet.

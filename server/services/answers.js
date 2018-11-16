@@ -11,9 +11,15 @@ module.exports = function() {
         let db = global.getService("db");
         db.beginTransaction();
         try {
-            let result = await db.insert(questionTable, ["userId", "question", "description", "added"], [userId, question, description, added.toISOString()]);
+            // Insert the question into the question table
+            let result = await db.insert(questionTable, ["userId", "question", "description", "added", "rating"], [userId, question, description, added.toISOString(), 1]);
             let insertId = result.lastID;
+            
+            // Do the indexing for the question to show up in search results
             await db.insert(ftsQuestionTable, ["questionId", "question", "description"], [insertId, question, description]);
+            
+            // Upvote the question automatically for the user's account
+            await db.insert(questionVoteTable, ["questionId", "userId", "upVote"], [insertId, userId, 1]);
             db.commitTransaction();
             return insertId;
         } catch (e) {
@@ -27,10 +33,17 @@ module.exports = function() {
         let added = new Date();
 
         let db = global.getService("db");
+        db.beginTransaction();
         try {
-            let result = await db.insert(answerTable, ["userId", "questionId", "answer", "added"], [userId, questionId, answer, added.toISOString()]);
+            // Insert the answer into the answer table
+            let result = await db.insert(answerTable, ["userId", "questionId", "answer", "added", "rating"], [userId, questionId, answer, added.toISOString(), 1]);
+
+            // Upvote the answer automatically for the user's account
+            await db.insert(answerVoteTable, ["answerId", "userId", "upVote"], [result.lastID, userId, 1]);
+            db.commitTransaction();
             return result.lastID;
         } catch (e) {
+            db.rollbackTransaction();
             return -1;
         }
     };

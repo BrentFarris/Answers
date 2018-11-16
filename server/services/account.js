@@ -4,7 +4,17 @@ const accountTable = "Accounts";
 const crypto = require("crypto");
 
 module.exports = function() {
-    this.create = async function(username, password, isRequest) {
+    this.create = async function(username, password, isRequest, isAdmin) {
+        if (!username || !username.trim().length) {
+			return "A username is required to register. <a href='/'>Return Home</a>";
+		} else if (!password || !password.trim().length) {
+			return "A passwrod is required to register. <a href='/'>Return Home</a>";
+		} else if (username.length < 5) {
+			return "A recognizable username of 5 characters is required to register. <a href='/'>Return Home</a>";
+		} else if (username.indexOf(' ') !== -1) {
+			return "A username can not consist of spaces. <a href='/'>Return Home</a>";
+		}
+
         let db = global.getService("db");
         let row = await db.get(accountTable, "*", ["username"], [username]);
         if (row) {
@@ -21,11 +31,19 @@ module.exports = function() {
         let verified = 1;
         if (isRequest) {
             verified = 0;
+        }
+
+        let admin = null;
+        if (isAdmin) {
+            admin = 1;
+        }
+
+        if (isRequest || isAdmin) {
             session = null;
         }
 
         try {
-            await db.insert(accountTable, ["username", "hash", "session", "verified"], [username, hash, session, verified]);
+            await db.insert(accountTable, ["username", "hash", "session", "verified", "admin"], [username, hash, session, verified, admin]);
             return session;
         } catch (e) {
             return false;
@@ -54,12 +72,18 @@ module.exports = function() {
 
     this.sessionAccount = async function(req) {
         let session = req.cookies.session;
-        let db = global.getService("db");
         if (!session || !session.length || !session.trim().length) {
             return null;
         }
+        
+        let db = global.getService("db");
+        let results = await db.query("SELECT `Accounts`.*, `RateLimits`.`lastQuestion`, `RateLimits`.`lastAnswer`, `RateLimits`.`lastVote` FROM `Accounts` LEFT JOIN `RateLimits` ON `Accounts`.`id`=`RateLimits`.`userId` WHERE `session`=?", [session]);
 
-        return await db.get(accountTable, "*", ["session"], [session]);
+        if (!results || !results.length) {
+            return null;
+        }
+
+        return results[0];
     };
 
     this.updateSession = async function(username) {

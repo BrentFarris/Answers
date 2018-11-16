@@ -3,7 +3,8 @@ CREATE TABLE `Accounts` (
 	`username`	TEXT NOT NULL UNIQUE,
 	`hash`	TEXT NOT NULL,
 	`session`	TEXT UNIQUE,
-	`verified`	INTEGER NOT NULL DEFAULT 0
+	`verified`	INTEGER,
+	`admin`	INTEGER
 );
 
 CREATE TABLE `Questions` (
@@ -48,4 +49,13 @@ CREATE TABLE `QuestionVotes` (
 	PRIMARY KEY(`userId`,`questionId`),
 	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`),
 	FOREIGN KEY(`questionId`) REFERENCES `Questions`(`id`)
+);
+
+CREATE TABLE `RateLimits` (
+	`userId`	INTEGER NOT NULL UNIQUE,
+	`lastQuestion`	TEXT NOT NULL,
+	`lastAnswer`	TEXT NOT NULL,
+	`lastVote`	TEXT NOT NULL,
+	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`),
+	PRIMARY KEY(`userId`)
 );

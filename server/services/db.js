@@ -43,6 +43,18 @@ module.exports = function() {
         db.run("COMMIT");
     };
 
+    this.query = function(sql, values) {
+        return new Promise(function (success, failure) {
+            db.all(sql, values, (err, rows) => {
+                if (err) {
+                    return failure(err);
+                }
+
+                success(rows);
+            });
+        });
+    };
+
     this.allIn = function(table, select, field, values, order, limit) {
         return new Promise(function (success, failure) {
             let sql = `SELECT ${select} FROM ${table} WHERE ${field} IN (${values.join()})`;
