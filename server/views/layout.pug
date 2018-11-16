@@ -2,19 +2,16 @@ doctype html
 html
 	head
 		title= title
+		link(rel='stylesheet', href='/stylesheets/bootstrap.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		script(src="/javascripts/web2d.http.js")
+
+		block setup
 	body
-		a(href="/") Home
-		br
-		br
-		-if (account) {
-			a(href="/user/logout") Logout
-		- } else {
-			form(action="/user/login", method="post")
-				input(name="username", type="text", placeholder="Username...")
-				input(name="password", type="password", placeholder="Password...")
-				input(name="login", type="submit", value="Login")
-				span &nbsp;|&nbsp;
-				input(name="request", type="submit", value="Request Account")
-		- }
+		include header
+
 		block content
+
+		include footer
+
+		block scripts

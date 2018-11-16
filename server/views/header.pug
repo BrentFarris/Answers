@@ -1,0 +1,20 @@
+header
+	nav.navbar.navbar-expand-lg.navbar-dark
+		a.navbar-brand(href="/") Home
+		div.collapse.navbar-collapse#navbarSupportedContent
+			ul.navbar-nav.mr-auto
+				-if (account) {
+					li.nav-item
+						a.nav-link(href="/user/logout") Logout
+				- } else {
+					li.nav-item
+						form.form-inline(action="/user/login", method="post")
+							div.form-group.mb-2
+								input.form-control(name="username", type="text", placeholder="Username...")
+							div.form-group.mb-2.mx-sm-3
+								input.form-control(name="password", type="password", placeholder="Password...")
+							div.form-group.mb-2.mx-sm-3
+								input.btn.btn-primary(name="login", type="submit", value="Login")
+							div.form-group.mb-2
+								input.btn(name="request", type="submit", value="Request Account")
+				- }

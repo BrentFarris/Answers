@@ -12,6 +12,8 @@ CREATE TABLE `Questions` (
 	`question`	TEXT NOT NULL UNIQUE,
 	`description`	TEXT NOT NULL,
 	`rating`	INTEGER NOT NULL DEFAULT 0,
+	`added`	TEXT,
+	`updated`	TEXT,
 	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`)
 );
 
@@ -22,8 +24,28 @@ CREATE TABLE `Answers` (
 	`answer`	TEXT NOT NULL,
 	`rating`	INTEGER NOT NULL DEFAULT 0,
 	`approved`	INTEGER NOT NULL DEFAULT 0,
-	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`),
-	FOREIGN KEY(`questionId`) REFERENCES `Questions`(`id`)
+	`added`	TEXT,
+	`updated`	TEXT,
+	FOREIGN KEY(`questionId`) REFERENCES `Questions`(`id`),
+	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`)
 );
 
 CREATE VIRTUAL TABLE `VirtualQuestions` USING FTS5(`questionId`, `question`, `description`);
+
+CREATE TABLE `AnswerVotes` (
+	`answerId`	INTEGER NOT NULL,
+	`userId`	INTEGER NOT NULL,
+	`upVote`	INTEGER NOT NULL DEFAULT 0,
+	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`),
+	FOREIGN KEY(`answerId`) REFERENCES `Answers`(`id`),
+	PRIMARY KEY(`answerId`,`userId`)
+);
+
+CREATE TABLE `QuestionVotes` (
+	`questionId`	INTEGER NOT NULL,
+	`userId`	INTEGER NOT NULL,
+	`upVote`	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY(`userId`,`questionId`),
+	FOREIGN KEY(`userId`) REFERENCES `Accounts`(`id`),
+	FOREIGN KEY(`questionId`) REFERENCES `Questions`(`id`)
+);

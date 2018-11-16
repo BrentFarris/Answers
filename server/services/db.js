@@ -113,7 +113,7 @@ module.exports = function() {
                 return failure("The fields and values lengths do not match");
             }
 
-            var conditionStr = conditions.join("=?, ") + "=?";
+            var conditionStr = conditions.join("=? AND ") + "=?";
             db.get(`SELECT ${fields} FROM ${table} WHERE ${conditionStr}`, values, (err, row) => {
                 if (err) {
                     return failure(err);
@@ -137,7 +137,7 @@ module.exports = function() {
         });
     };
 
-    this.insert = function (table, fields, values, ignore) {
+    this.insert = function (table, fields, values, ignore, replace) {
         return new Promise(function (success, failure) {
             if (fields.length != values.length) {
                 return failure("The fields and values lengths do not match");
@@ -147,6 +147,8 @@ module.exports = function() {
 
             if (ignore) {
                 insertPrefix += " OR IGNORE";
+            } else if (replace) {
+                insertPrefix += " OR REPLACE"
             }
 
             var placeholders = [];
@@ -167,6 +169,10 @@ module.exports = function() {
 
     this.insertIgnore = function (table, fields, values) {
         return this.insert(table, fields, values, true);
+    };
+
+    this.insertReplace = function (table, fields, values) {
+        return this.insert(table, fields, values, false, true);
     };
 
     this.update = function (table, fields, values, conditions, conditionValues) {

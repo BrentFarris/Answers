@@ -1,18 +1,57 @@
 extends layout
 
+block setup
+	link(rel="stylesheet", href="/stylesheets/quill.snow.css")
+
 block content
-	h1= title
-	each line in data.question.description.split(/\n/)
-		p= line
-	br
-	hr
-	each answer in data.answers
+	div.container
+		div#question
+			input#questionId(type="hidden", value=data.question.id)
+			h1= title
+			span.dated= new Date(data.question.added).toString().substr(0, 24)
+			p!= data.question.description
+			span.rating [#{data.question.rating}]&nbsp;
+			-if (account) {
+				span
+					span [
+					span.fakeLink(onclick="questionVote(true)") Vote UP
+					span ]&nbsp;
+				span
+					span [
+					span.fakeLink(onclick="questionVote(false)") Vote DOWN
+					span ]
+			-}
 		br
-		strong= users[answer.userId].username
-		br
-		each line in answer.answer.split(/\n/)
-			p= line
-	form(action=`/answer/${data.question.id}`, method="post")
-		textarea(name="answer", placeholder="Give your answer...")
-		br
-		input(type="submit", value="Answer!")
+		hr
+		each answer in data.answers
+			div.answer(id="answer-" + answer.id)
+				strong= users[answer.userId].username
+				span.dated= ' - ' + new Date(answer.added).toString().substr(0, 24)
+				br
+				p!= answer.answer
+				span.rating [#{answer.rating}]&nbsp;
+				-if (account) {
+					span
+						span [
+						span.fakeLink(onclick="answerVote(" + answer.id + ", true)") Vote UP
+						span ]&nbsp;
+					span
+						span [
+						span.fakeLink(onclick="answerVote(" + answer.id + ", false)") Vote DOWN
+						span ]
+				-}
+		-if (account) {
+			hr
+			form#answerForm(action=`/answer/${data.question.id}`, method="post")
+				p Submit your own answer below:
+				div#answer
+				input#hiddenAnswer(name="answer", type="hidden", value="")
+				br
+				input.btn.btn-primary(type="submit", value="Answer!")
+		-}
+
+block scripts
+	-if (account) {
+		script(src="/javascripts/quill.js")
+		script(src="/javascripts/answer.js")
+	-}

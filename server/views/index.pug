@@ -1,22 +1,35 @@
 extends layout
 
+block setup
+	link(rel="stylesheet", href="/stylesheets/quill.snow.css")
+
 block content
-	h1 Answers
-	form(action="search", method="get")
-		input(name="terms", placeholder="Search...")
-	br
-	br
-	h2 New Question:
-	form(action="answer", method="post")
-		input(name="question", placeholder="Question...")
-		br
-		textarea(name="description", placeholder="More information about your question...")
-		br
-		input(type="submit", value="Ask!")
-	br
-	br
-	h2 Recent Questions:
-	ul
-		each row in recent
-			a(href=`/answer/${row.id}/${row.question}`)
-				li= row.question
+	div.container
+		h1 Answers
+		-if (account) {
+			form.form-group(action="search", method="get")
+				input.form-control(name="terms", placeholder="Search...")
+			br
+			br
+			h2 New Question:
+			form#quesetionForm.form-group(action="answer", method="post")
+				input.form-control(name="question", placeholder="Question...")
+				br
+				div#description
+				input#hiddenDescription(name="answer", type="hidden", value="")
+				br
+				input.btn.btn-primary(type="submit", value="Ask!")
+			br
+			br
+		- }
+		h2 Recent Questions:
+		ul
+			each row in recent
+				a(href=`/answer/${row.id}/${row.question}`)
+					li= row.question
+
+block scripts
+	-if (account) {
+		script(src="/javascripts/quill.js")
+		script(src="/javascripts/index.js")
+	-}
