@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	h1= title
+	each line in data.question.description.split(/\n/)
+		p= line
+	br
+	hr
+	each answer in data.answers
+		br
+		strong= users[answer.userId].username
+		br
+		each line in answer.answer.split(/\n/)
+			p= line
+	form(action=`/answer/${data.question.id}`, method="post")
+		textarea(name="answer", placeholder="Give your answer...")
+		br
+		input(type="submit", value="Answer!")

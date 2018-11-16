@@ -1,0 +1,22 @@
+extends layout
+
+block content
+	h1 Answers
+	form(action="search", method="get")
+		input(name="terms", placeholder="Search...")
+	br
+	br
+	h2 New Question:
+	form(action="answer", method="post")
+		input(name="question", placeholder="Question...")
+		br
+		textarea(name="description", placeholder="More information about your question...")
+		br
+		input(type="submit", value="Ask!")
+	br
+	br
+	h2 Recent Questions:
+	ul
+		each row in recent
+			a(href=`/answer/${row.id}/${row.question}`)
+				li= row.question
