@@ -39,7 +39,10 @@ router.post("/", async function(req, res, next) {
     }
 
     let question = req.body.question.trim();
-    let description = req.body.description.trim();
+    let description = "";
+    if (req.body.description) {
+        description = req.body.description.trim();
+    }
     
     if (!question.length) {
         res.send("You can't submit a question without there being a question. <a href='/'>Return Home</a>");
