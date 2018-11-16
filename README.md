@@ -1,7 +1,6 @@
-# Answers
+# Answers - "Open Source Stack Overflow?"
 I just want an easy to use straight forward Questions And Answers thing to use with my teams or my communities. This is not a comprehensive end all be all massive web server to house millions of users, if you want that you'll need to modify some stuff. This is made to support a good size team or community.
 
-# Open Source Stack Overflow?
 So what is this thing? It is a very simple, straight forward questions and answers application that you can run on any size web server. You can even run this on a raspberry pi if you wanted to. There is no heavy account systems, emails or anything like that right now, it is just simple and straight forward. You setup the Q&A server, create an admin, and then manually accept user account requests. This makes it super easy for you to work privately with your team and avoid spam. Of course, if you need automatic user accepting, you can easily modify the code to add email verification.
 
 ## Basic project structure
