@@ -1,12 +1,7 @@
 extends layout
 
 block content
-	h1 Answers
-	form(action="search", method="get")
-		input(name="terms", placeholder="Search...")
-	br
-	br
-	h2 Recent Requests:
+	h1 Recent Requests:
 	- if (users.length) {
 		ul
 			each user in users
