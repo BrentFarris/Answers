@@ -7,18 +7,18 @@ So what is this thing? It is a very simple, straight forward questions and answe
 Everything is a service and an endpoint in this system. So you can just swap out a service with another service and completely change how the system works. For example, the base database used for this is SQLite, all you have to do is swap out the "db.js" file in the services with your own custom one (or someone elses if one exists) and it could support MySQL or any other kind of database.
 
 # How To Setup?
-#1 Pull the code from git onto your server (or local machine).
-#2 Make sure you have Node installed
-#3 Run the server with npm start
-#4 Go to `host_address:port/setup` (where host address is your server's host address and the port number is the port that you set to listen on)
-#5 Input your admin username and password
+1. Pull the code from git onto your server (or local machine).
+2. Make sure you have Node installed
+3. Run the server with npm start
+4. Go to `host_address:port/setup` (where host address is your server's host address and the port number is the port that you set to listen on)
+5. Input your admin username and password
 
 This completes your setup and you are ready to start using the application.
 
 ## How do members join?
-#1 Go to the web page for the server
-#2 They type in a username they want to have
-#3 They type in a password they want to have
-#4 They click the "Request Account" button instead of the login button
+1. Go to the web page for the server
+2. They type in a username they want to have
+3. They type in a password they want to have
+4. They click the "Request Account" button instead of the login button
 
 After they have requested a login, you (the admin) has to approve them. So just go to `/user/requests` on your server to see the list of requested users. From there just click on **Approve** to unlock their account to be used.
