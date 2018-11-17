@@ -9,9 +9,11 @@ Everything is a service and an endpoint in this system. So you can just swap out
 # How To Setup?
 1. Pull the code from git onto your server (or local machine).
 2. Make sure you have Node installed
-3. Run the server with npm start
-4. Go to `host_address:port/setup` (where host address is your server's host address and the port number is the port that you set to listen on)
-5. Input your admin username and password
+3. Run `npm install` inside the `server` the directory
+4. Copy all files in `server/private` folder into the `server` folder
+5. Run the server with `npm start` inside the `server` directory
+6. Go to `host_address:port/setup` (where host address is your server's host address and the port number is the port that you set to listen on)
+7. Input your admin username and password
 
 This completes your setup and you are ready to start using the application.
 
