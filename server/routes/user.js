@@ -49,7 +49,13 @@ router.post("/login", async function(req, res, next) {
 	let accountService = global.getService("account");
 
 	if (req.body.request) {
-		let result = await accountService.create(username, password, true);
+		let info = req.body.info;
+
+		if (info) {
+			info = info.trim();
+		}
+
+		let result = await accountService.create(username, password, info, true);
 		if (result === false) {
 			return res.send("There was a problem creating your request, please try again. <a href='/'>Return Home</a>");
 		} else if (result !== null) {
@@ -75,22 +81,6 @@ router.post("/login", async function(req, res, next) {
         httpOnly: true
 	});
 
-	res.redirect("/");
-});
-
-router.post("/", async function(req, res, next) {
-	let session = await global.getService("account").create(username, password);
-
-	if (!session) {
-		res.send("There was an issue creating the account, please try again.  <a href='/'>Return Home</a>");
-		return;
-	}
-
-	res.cookie("session", session, {
-        maxAge: 1000 * 60 * 60 * 24 * 365,
-        httpOnly: true
-	});
-	
 	res.redirect("/");
 });
 

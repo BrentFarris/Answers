@@ -5,7 +5,7 @@ block content
 	- if (users.length) {
 		ul
 			each user in users
-				li= user.username + " "
+				li= user.username + " (" + user.info + ")" + " "
 					span [
 					a(href=`/user/requests/${user.id}`) Approve
 					span ]

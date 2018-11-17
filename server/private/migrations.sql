@@ -4,7 +4,8 @@ CREATE TABLE `Accounts` (
 	`hash`	TEXT NOT NULL,
 	`session`	TEXT UNIQUE,
 	`verified`	INTEGER,
-	`admin`	INTEGER
+	`admin`	INTEGER,
+	`info`	TEXT
 );
 
 CREATE TABLE `Questions` (

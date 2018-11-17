@@ -19,7 +19,7 @@ router.post("/", async function(req, res, next) {
     let password = req.body.password;
     
     fs.unlinkSync("setup.txt", (e) => { console.log(e); });
-    let result = await global.getService("account").create(username, password, false, true);
+    let result = await global.getService("account").create(username, password, "Created through setup", false, true);
 
     if (result === false) {
         return res.send("There was a problem creating the admin, please try again. <a href='/'>Return Home</a>");

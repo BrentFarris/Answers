@@ -4,7 +4,7 @@ const accountTable = "Accounts";
 const crypto = require("crypto");
 
 module.exports = function() {
-    this.create = async function(username, password, isRequest, isAdmin) {
+    this.create = async function(username, password, info, isRequest, isAdmin) {
         if (!username || !username.trim().length) {
 			return "A username is required to register. <a href='/'>Return Home</a>";
 		} else if (!password || !password.trim().length) {
@@ -43,7 +43,7 @@ module.exports = function() {
         }
 
         try {
-            await db.insert(accountTable, ["username", "hash", "session", "verified", "admin"], [username, hash, session, verified, admin]);
+            await db.insert(accountTable, ["username", "hash", "session", "verified", "admin", "info"], [username, hash, session, verified, admin, info]);
             return session;
         } catch (e) {
             return false;

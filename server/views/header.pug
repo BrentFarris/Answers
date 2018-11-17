@@ -8,13 +8,14 @@ header
 						a.nav-link(href="/user/logout") Logout
 				- } else {
 					li.nav-item
-						form.form-inline(action="/user/login", method="post")
+						form#login.form-inline(action="/user/login", method="post")
+							input#info(name="info", type="hidden")
 							div.form-group.mb-2
 								input.form-control(name="username", type="text", placeholder="Username...")
 							div.form-group.mb-2.mx-sm-3
 								input.form-control(name="password", type="password", placeholder="Password...")
 							div.form-group.mb-2.mx-sm-3
-								input.btn.btn-primary(name="login", type="submit", value="Login")
+								input.btn.btn-primary(name="login", type="submit", value="Login", onclick="this.form.submited=this.value;")
 							div.form-group.mb-2
-								input.btn(name="request", type="submit", value="Request Account")
+								input.btn(name="request", type="submit", value="Request Account", onclick="this.form.submited=this.value;")
 				- }
