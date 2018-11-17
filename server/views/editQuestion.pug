@@ -1,0 +1,19 @@
+extends layout
+
+block setup
+	link(rel="stylesheet", href="/stylesheets/quill.snow.css")
+
+block content
+	div.container
+		div#question
+			h1= title
+			form#questionForm.form-group(action="/answer/updateQuestion/" + question.id, method="post")
+				input#hiddenQuestion(name="description", type="hidden")
+				div#answer!= question.description
+				input.btn.btn-primary(type="submit", value="Update")
+
+block scripts
+	-if (account) {
+		script(src="/javascripts/quill.js")
+		script(src="/javascripts/editQuestion.js")
+	-}

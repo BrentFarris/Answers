@@ -89,6 +89,56 @@ router.post("/:id", async function(req, res, next) {
     res.redirect(`/answer/${questionId}/answered/${id}`);
 });
 
+router.post("/updateQuestion/:id", async function(req, res, next) {
+    let account = await global.getService("account").sessionAccount(req);
+    if (!account) {
+        return res.redirect("/");
+    }
+
+    let questionId = req.params.id.trim();
+    let description = req.body.description.trim();
+
+    if (!description.length) {
+        res.send("You can't submit a question without there being a question. <a href='/'>Return Home</a>");
+        return;
+    }
+
+    let answerService = global.getService("answers");
+    let questionEntry = await answerService.getQuestion(questionId);
+
+    if (!questionEntry || questionEntry.userId !== account.id) {
+        return res.redirect("/");
+    }
+
+    await answerService.updateQuestion(questionEntry.id, description);
+    res.redirect(`/answer/${questionEntry.id}/${questionEntry.question}`);
+});
+
+router.post("/updateAnswer/:id", async function(req, res, next) {
+    let account = await global.getService("account").sessionAccount(req);
+    if (!account) {
+        return res.redirect("/");
+    }
+
+    let answerId = req.params.id.trim();
+    let answer = req.body.answer.trim();
+
+    if (!answer.length) {
+        res.send("You can't submit an answer without there being an answer. <a href='/'>Return Home</a>");
+        return;
+    }
+
+    let answerService = global.getService("answers");
+    let answerEntry = await answerService.getAnswer(answerId);
+
+    if (!answerEntry || answerEntry.userId !== account.id) {
+        return res.redirect("/");
+    }
+
+    await answerService.updateAnswer(answerEntry.id, answer);
+    res.redirect(`/answer/${answerEntry.questionId}/answered/${answerEntry.id}`);
+});
+
 router.post("/vote/question", async function(req, res, next) {
     let account = await global.getService("account").sessionAccount(req);
     if (!account) {

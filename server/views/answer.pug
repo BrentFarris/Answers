@@ -19,7 +19,13 @@ block content
 				span
 					span [
 					span.fakeLink(onclick="questionVote(false)") Vote DOWN
+					span ]&nbsp;
+				-if (data.question.userId === account.id) {
+					span
+					span [
+					a(href="/edit/question/" + data.question.id) Edit
 					span ]
+				-}
 			-}
 		br
 		hr
@@ -38,7 +44,13 @@ block content
 					span
 						span [
 						span.fakeLink(onclick="answerVote(" + answer.id + ", false)") Vote DOWN
+						span ]&nbsp;
+					-if (answer.userId === account.id) {
+						span
+						span [
+						a(href="/edit/answer/" + answer.id) Edit
 						span ]
+					-}
 				-}
 		-if (account) {
 			hr

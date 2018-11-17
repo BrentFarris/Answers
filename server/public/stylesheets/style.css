@@ -121,6 +121,11 @@ footer {
     font-weight: bold;
 }
 
+.ql-syntax {
+    background-color: #DDD;
+    padding: 10px;
+}
+
 /* ========= MESSAGE, CONFRIM & PROMPT WINDOW ========= */
 .messageWindow, .confirmWindow, .promptWindow {
 	position: fixed;

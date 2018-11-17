@@ -48,6 +48,32 @@ module.exports = function() {
         }
     };
 
+    this.updateQuestion = async function(questionId, description) {
+        let now = new Date();
+
+        let db = global.getService("db");
+        try {
+            // Update the question
+            let result = await db.update(questionTable, ["description", "updated"], [description, now.toISOString()], ["id"], [questionId]);
+            return result.lastID;
+        } catch (e) {
+            return -1;
+        }
+    };
+
+    this.updateAnswer = async function(answerId, answer) {
+        let now = new Date();
+
+        let db = global.getService("db");
+        try {
+            // Update the answer
+            let result = await db.update(answerTable, ["answer", "updated"], [answer, now.toISOString()], ["id"], [answerId]);
+            return result.lastID;
+        } catch (e) {
+            return -1;
+        }
+    };
+
     this.search = async function(term) {
         let db = global.getService("db");
         return await db.fts5(ftsQuestionTable, "*", "question", term);
@@ -63,6 +89,16 @@ module.exports = function() {
         result.question = await db.get(questionTable, "*", ["id"], [questionId]);
         result.answers = await db.all(answerTable, ["questionId"], [questionId], "`rating` DESC")
         return result;
+    };
+
+    this.getQuestion = async function(questionId) {
+        let db = global.getService("db");
+        return await db.get(questionTable, "*", ["id"], [questionId]);
+    };
+
+    this.getAnswer = async function(answerId) {
+        let db = global.getService("db");
+        return await db.get(answerTable, "*", ["id"], [answerId]);
     };
 
     this.recent = async function(count) {
